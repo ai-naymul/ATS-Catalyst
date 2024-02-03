@@ -47,13 +47,41 @@ def input_pdf_setup(uploaded_file):
 
 ## Streamlit app configuration
 
-st.header('Resume Evaluator By ATS Catalyst')
+st.set_page_config(page_title="Resume Evaluator By ATS Catalyst")
+st.header('Resume Evaluator')
 st.subheader("Resume Evaluator")
-experience_weight = st.slider("Experience Weight", 0, 10, 5)
-skills_weight = st.slider("Skills Weight", 0, 10, 5)
-education_weight = st.slider("Education Weight", 0, 10, 5)
-keywords_weight = st.slider("Keywords Weight", 0, 10, 5)
+st.markdown('''The Scoring Is 1-100 
+            Ranges: 
+            \n **Excellent (81-100)🥇**
+            \n **Good (61-80) 👍**
+            \n **Average (41-60) 🤔**
+            \n **Below Average (21-40) 😐**
+            \n **Poor (1-20) 😑👎**
+            ''')
+
+upload_resume = st.file_uploader('Upload Your Resume(PDF)....', type=['pdf'])
 
 
+if upload_resume is not None:
+    st.write('Resume Uploaded Successfully')
+else:
+    st.write('Please Upload Your Resume In PDF Format.')
 
+submit = st.button('Get The Score')
+
+
+input_prompt = '''You are a great resume evaluator with deep understaning of ATS(Application Tracking Systems) and ATS functionality,
+your task is to evaluate the resume according to a score The scoring range is [Excellent (81-100) , Good (61-80), 
+Average (41-60), Below Average (21-40), Poor (1-20)]. So give a score to the regarding resume the range I give to you
+and evaluate the score and the resume and evaluate the resume according to the education, skills, projects, resume structure, resume readability,
+experience, contributions, volunter works, certification, grades, how Tailored Content are, Professional Summary, Quantifiable Achievements,
+Relevant Skills, Clear Formatting, Correct Spelling and Grammar, Strong Action Verbs and so on '''
+
+input = "There will be three section one is for Score,one for what the things are good in the resume, one is for What the things to change, one for what the things to add, one for what the things to exclude, one for how to make it more impactful and enagnign to recruiters"
+
+if submit:
+    pdf_content = input_pdf_setup(upload_resume)
+    response= get_gemini_response(input,pdf_content,input_prompt)
+    st.subheader("The Score and Feedback Is:")
+    st.write(response)
 
