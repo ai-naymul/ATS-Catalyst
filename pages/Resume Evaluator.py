@@ -49,7 +49,6 @@ def input_pdf_setup(uploaded_file):
 
 st.set_page_config(page_title="Resume Evaluator By ATS Catalyst")
 st.header('Resume Evaluator')
-st.subheader("Resume Evaluator")
 st.markdown('''The Scoring Is 1-100 
             Ranges: 
             \n **Excellent (81-100)🥇**
