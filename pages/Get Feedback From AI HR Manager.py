@@ -1,13 +1,14 @@
-# from dotenv import load_dotenv
-
-# load_dotenv()
 import base64
 import streamlit as st
 import io
 import pdf2image
 import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
-GOOGLE_API_KEY = "AIzaSyD3ppjOkpyQCxuZmEFKy-V3mTAhaAnypnw"
+load_dotenv()
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 
 genai.configure(api_key=GOOGLE_API_KEY)
