@@ -19,7 +19,19 @@ genai.configure(api_key=GOOGLE_API_KEY)
 def get_gemini_response(input,pdf_content,prompt):
     model=genai.GenerativeModel('gemini-pro-vision')
     response=model.generate_content([input,pdf_content[0],prompt])
-    return response.text
+    try:
+    # Check if 'candidates' list is not empty
+        if response.candidates:
+            # Access the first candidate's content if available
+            if response.candidates[0].content.parts:
+                generated_text = response.candidates[0].content.parts[0].text
+                return generated_text
+            else:
+                return "No generated text found in the candidate."
+        else:
+            return "No candidates found in the response."
+    except (AttributeError, IndexError) as e:
+        print("Error:", e)
 
 
 ## handle the pdf stuff
@@ -82,7 +94,7 @@ input = "There will be three section one is for Score,one for what the things ar
 
 if submit:
     pdf_content = input_pdf_setup(upload_resume)
-    response= get_gemini_response(input,pdf_content,input_prompt)
+    response= get_gemini_response(input=input,pdf_content=pdf_content,prompt=input_prompt)
     st.subheader("The Score and Feedback Is:")
     st.write(response)
 

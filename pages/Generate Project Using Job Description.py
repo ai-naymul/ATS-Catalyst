@@ -17,7 +17,19 @@ genai.configure(api_key=GOOGLE_API_KEY)
 def get_gemini_response(input,pdf_content,prompt):
     model=genai.GenerativeModel('gemini-pro-vision')
     response=model.generate_content([input,pdf_content[0],prompt])
-    return response.text
+    try:
+    # Check if 'candidates' list is not empty
+        if response.candidates:
+            # Access the first candidate's content if available
+            if response.candidates[0].content.parts:
+                generated_text = response.candidates[0].content.parts[0].text
+                return generated_text
+            else:
+                return "No generated text found in the candidate."
+        else:
+            return "No candidates found in the response."
+    except (AttributeError, IndexError) as e:
+        print("Error:", e)
 
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:

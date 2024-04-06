@@ -16,7 +16,20 @@ genai.configure(api_key=GOOGLE_API_KEY)
 def get_gemini_response(input,pdf_content,prompt):
     model=genai.GenerativeModel('gemini-pro-vision')
     response=model.generate_content([input,pdf_content[0],prompt])
-    return response.text
+    print(response.text)
+    try:
+    # Check if 'candidates' list is not empty
+        if response.candidates:
+            # Access the first candidate's content if available
+            if response.candidates[0].content.parts:
+                generated_text = response.candidates[0].content.parts[0].text
+                return generated_text
+            else:
+                return "No generated text found in the candidate."
+        else:
+            return "No candidates found in the response."
+    except (AttributeError, IndexError) as e:
+        print("Error:", e)
 
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
@@ -44,8 +57,8 @@ def input_pdf_setup(uploaded_file):
 
 st.set_page_config(page_title="ATS Catalyst - Streamlining Resume Screening with AI")
 st.header("ATS Catalyst - AI-Powered Resume Feedback System")
-input_text=st.text_area("Job Description: ",key="input")
-uploaded_file=st.file_uploader("Upload your resume(Format should be in PDF)",type=["pdf"])
+input_text = st.text_area("Job Description: ",key="input")
+uploaded_file = st.file_uploader("Upload your resume(Format should be in PDF)",type=["pdf"])
 
 
 if uploaded_file is not None:
@@ -63,7 +76,7 @@ feedback_prompt = """
 if get_feedback_submit_btn:
     if uploaded_file is not None:
         pdf_content=input_pdf_setup(uploaded_file)
-        response=get_gemini_response(feedback_prompt,pdf_content,input_text)
+        response=get_gemini_response(prompt=feedback_prompt,pdf_content=pdf_content,input=input_text)
         st.subheader("The Repsonse is")
         st.write(response)
     else:
