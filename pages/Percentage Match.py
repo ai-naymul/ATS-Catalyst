@@ -62,8 +62,10 @@ input_text=st.text_area("Job Description: ",key="input")
 uploaded_file=st.file_uploader("Upload your resume(Format should be in PDF)",type=["pdf"])
 
 
-if uploaded_file is not None:
-    st.write("PDF Uploaded Successfully")
+if upload_resume is not None:
+    st.write('Resume Uploaded Successfully')
+else:
+    st.write('Please Upload Your Resume In PDF Format.')
 
 
 percentage_match_btn = st.button("Percentage match")
@@ -80,7 +82,6 @@ if percentage_match_btn:
     if uploaded_file is not None:
         pdf_content=input_pdf_setup(uploaded_file)
         response=get_gemini_response(prompt=percentage_match_prompt,pdf_content=pdf_content,input=input_text)
-        st.subheader("The Repsonse is")
         st.write(response)
     else:
         st.write("Please uplaod the resume")

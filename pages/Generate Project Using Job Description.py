@@ -82,15 +82,16 @@ Here is the job description to consider.{job_description}"""
 
 upload_resume = st.file_uploader('Upload your resume...',type=['pdf'])
 
-
+if upload_resume is not None:
+    st.write('Resume Uploaded Successfully')
+else:
+    st.write('Please Upload Your Resume In PDF Format.')
 
 generate_projects = st.button('Generate Project')
 
 
 if generate_projects:
     if upload_resume is not None:
-        st.write('Resume Uploaded Successfully')
-        # use the method from the main
         resume_content= input_pdf_setup(uploaded_file=upload_resume)
         response = get_gemini_response(prompt=prompt,pdf_content=resume_content,input=job_description)
         st.write("Here are some projects matching with the job description")
