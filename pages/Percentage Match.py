@@ -62,7 +62,7 @@ input_text=st.text_area("Job Description: ",key="input")
 uploaded_file=st.file_uploader("Upload your resume(Format should be in PDF)",type=["pdf"])
 
 
-if upload_resume is not None:
+if uploaded_file is not None:
     st.write('Resume Uploaded Successfully')
 else:
     st.write('Please Upload Your Resume In PDF Format.')
