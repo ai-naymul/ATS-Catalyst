@@ -4,3 +4,4 @@ python-dotenv
 pdf2image
 requests
 streamlit_lottie
+serpapi
